@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pac-Man Simples</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        canvas {
+            display: block;
+            margin: auto;
+            background: #222;
+        }
+        #controls {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .btn {
+            background: #555;
+            border: none;
+            color: #fff;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="600" height="400"></canvas>
+    <div id="controls">
+        <button class="btn" id="left">←</button>
+        <button class="btn" id="right">→</button>
+        <button class="btn" id="up">↑</button>
+        <button class="btn" id="down">↓</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const pacSize = 30;
+        let pacX = canvas.width / 2;
+        let pacY = canvas.height / 2;
+        let pacSpeed = 5;
+
+        function drawPacman() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.arc(pacX, pacY, pacSize, 0.2 * Math.PI, 1.8 * Math.PI); // Arco Pac-Man
+            ctx.lineTo(pacX, pacY); // Fecha o caminho
+            ctx.fillStyle = 'yellow';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function update() {
+            drawPacman();
+        }
+
+        function movePacman(direction) {
+            switch (direction) {
+                case 'left':
+                    pacX -= pacSpeed;
+                    break;
+                case 'right':
+                    pacX += pacSpeed;
+                    break;
+                case 'up':
+                    pacY -= pacSpeed;
+                    break;
+                case 'down':
+                    pacY += pacSpeed;
+                    break;
+            }
+            pacX = Math.max(pacSize, Math.min(canvas.width - pacSize, pacX));
+            pacY = Math.max(pacSize, Math.min(canvas.height - pacSize, pacY));
+            update();
+        }
+
+        document.getElementById('left').addEventListener('click', () => movePacman('left'));
+        document.getElementById('right').addEventListener('click', () => movePacman('right'));
+        document.getElementById('up').addEventListener('click', () => movePacman('up'));
+        document.getElementById('down').addEventListener('click', () => movePacman('down'));
+
+        window.addEventListener('resize', update);
+
+        update();
+    </script>
+</body>
+</html>
